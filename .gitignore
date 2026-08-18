@@ -1,0 +1,39 @@
+# deps
+node_modules/
+.pnp
+.pnp.js
+
+# builds
+dist/
+build/
+out/
+release/
+target/
+
+# rn / native
+android/.gradle/
+android/local.properties
+android/app/build/
+ios/Pods/
+ios/build/
+harmony/.hvigor/
+harmony/build/
+*.jks
+*.keystore
+
+# env & secrets
+.env
+.env.*
+!.env.example
+
+# tauri
+src-tauri/target/
+src-tauri/gen/schemas/
+
+# misc
+.DS_Store
+*.log
+coverage/
+.idea/
+.vscode/
+*.tsbuildinfo

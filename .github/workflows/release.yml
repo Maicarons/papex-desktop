@@ -1,0 +1,53 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+            script: scripts/build-win.sh
+          - os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            script: scripts/build-linux.sh
+          - os: macos-latest
+            target: universal-apple-darwin
+            script: scripts/build-mac.sh
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Build + sign + notarize
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+          APPLE_SIGN_IDENTITY: ${{ secrets.APPLE_SIGN_IDENTITY }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          WIN_CERT: ${{ secrets.WIN_CERT }}
+        run: bash ${{ matrix.script }}
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: src-tauri/target/**/bundle/**/*
+          generate_release_notes: true
+      - name: Upload updater manifest
+        uses: actions/upload-artifact@v4
+        with:
+          name: latest-${{ matrix.target }}
+          path: src-tauri/target/**/latest.json

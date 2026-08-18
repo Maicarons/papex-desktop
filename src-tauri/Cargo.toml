@@ -1,0 +1,54 @@
+[package]
+name = "papex-desktop"
+version = "0.1.0"
+description = "Papex desktop research workbench"
+authors = ["The Papex Authors"]
+license = "Apache-2.0"
+edition = "2021"
+rust-version = "1.77"
+
+# The frontend invokes Rust commands by name; keep them stable.
+[lib]
+name = "papex_desktop_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[dependencies]
+tauri = { version = "2", features = ["tray-icon", "image-png"] }
+tauri-plugin-updater = "2"
+tauri-plugin-notification = "2"
+tauri-plugin-single-instance = "2"
+tauri-plugin-dialog = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-shell = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+log = "0.4"
+tauri-plugin-log = "2"
+
+# Native capabilities (thin layer only).
+rusqlite = { version = "0.32", features = ["bundled"] }
+keyring = "3"
+dirs = "5"
+reqwest = { version = "0.12", features = ["multipart", "stream", "json"] }
+tokio = { version = "1", features = ["full"] }
+pdfium-render = "0.10"
+tantivy = "0.22"
+uuid = { version = "1", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+[features]
+# Linux headless fallback writes an encrypted keyring file (0600) when no
+# SecretService is present. Enabled by default on non-Desktop environments.
+default = ["keyring-file-fallback"]
+keyring-file-fallback = []
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true

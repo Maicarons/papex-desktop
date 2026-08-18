@@ -1,0 +1,40 @@
+/* Papex desktop global styles — Tailwind 4 via @tailwindcss/vite. */
+@import "tailwindcss";
+
+/* Support a manual `.dark` class (toggled by settings) in addition to the
+   system preference. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-brand: #2f6df6;
+  --color-brand-dark: #1d4ed8;
+  --color-accent: #16a34a;
+  --radius-card: 0.75rem;
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", "PingFang SC",
+    "Microsoft YaHei", sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+html.dark body {
+  background: #0b1220;
+  color: #e5e7eb;
+}
+
+/* pdf.js text layer should not capture pointer events for highlights. */
+.pdf-text-layer {
+  pointer-events: none;
+}
