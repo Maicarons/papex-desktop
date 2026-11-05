@@ -60,7 +60,6 @@ pub async fn check_update(
             current_version: update.current_version,
             date: update.date.map(|d| d.to_string()),
         })),
-        })),
         Ok(None) => Ok(None),
         Err(e) => Err(AppError::Http(e.to_string())),
     }
