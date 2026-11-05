@@ -69,7 +69,7 @@ export async function evictIfNeeded(baseDir: string, limitMb = DEFAULT_LIMIT_MB)
       .map(async (e) => {
         const path = `${dir}/${e.name}`;
         const s = await stat(path);
-        return { path, size: s.size ?? 0, mtime: s.mtime ?? 0 };
+        return { path, size: s.size ?? 0, mtime: s.mtime instanceof Date ? s.mtime.getTime() : Number(s.mtime) || 0 };
       }),
   );
   const total = files.reduce((a, f) => a + f.size, 0);
