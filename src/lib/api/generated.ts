@@ -130,7 +130,7 @@ export interface SubmitPaperInput {
 
 /** Upload endpoints and their multipart field shapes. */
 export const UPLOAD_ENDPOINTS = {
-  submit: (input: { title: string }) => `/api/papers`,
+  submit: (_input: { title: string }) => `/api/papers`,
   submitVersion: (paperId: string) => `/api/papers/${paperId}/pdf`,
   import: () => `/api/papers/import`,
   avatar: () => `/api/me/avatar`,

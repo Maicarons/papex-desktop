@@ -32,9 +32,13 @@ pub fn get(conn: &Connection, paper_id: &str, version: i64) -> AppResult<Vec<Ann
 /// Insert or update an annotation. New rows start as `local`; updates to
 /// `synced` rows are bumped to `pending` so the sync queue can replay them.
 pub fn upsert(conn: &Connection, a: &AnnotationRow) -> AppResult<()> {
-    let exists: bool =
-        conn.query_row("SELECT 1 FROM annotations WHERE id = ?1", [a.id.clone()], |_| Ok(()))
-            .is_ok();
+    let exists: bool = conn
+        .query_row(
+            "SELECT 1 FROM annotations WHERE id = ?1",
+            [a.id.clone()],
+            |_| Ok(()),
+        )
+        .is_ok();
 
     let new_state = if exists && a.sync_state == "synced" {
         "pending"

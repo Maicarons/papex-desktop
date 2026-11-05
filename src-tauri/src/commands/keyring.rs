@@ -25,9 +25,7 @@ pub fn keyring_set(_state: State<AppState>, args: KeyringArgs) -> AppResult<()> 
         .secret
         .ok_or_else(|| AppError::Validation("missing secret".into()))?;
     let entry = keyring::Entry::new(SERVICE, &args.user).map_err(AppError::Keyring)?;
-    entry
-        .set_password(&secret)
-        .map_err(AppError::Keyring)?;
+    entry.set_password(&secret).map_err(AppError::Keyring)?;
     Ok(())
 }
 

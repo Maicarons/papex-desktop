@@ -9,6 +9,6 @@ pub mod db;
 pub mod index;
 pub mod keyring;
 pub mod pdf;
-pub mod system;
 pub mod sync;
+pub mod system;
 pub mod upload;

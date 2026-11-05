@@ -10,8 +10,8 @@ use crate::db::dao_sync::{enqueue, mark_retry, pop_due, remove};
 use crate::db::schema::SyncQueueRow;
 use crate::error::{AppError, AppResult};
 use crate::AppState;
-use serde::Serialize;
 use rusqlite::Connection;
+use serde::Serialize;
 use tauri::State;
 
 #[derive(Debug, Serialize)]
@@ -92,7 +92,10 @@ pub fn run(state: &AppState) -> AppResult<SyncResult> {
         .collect::<Result<Vec<_>, _>>()?;
     for id in ann_ids {
         if replay_annotation(state, &id).is_ok() {
-            conn.execute("UPDATE annotations SET sync_state = 'synced' WHERE id = ?1", [id])?;
+            conn.execute(
+                "UPDATE annotations SET sync_state = 'synced' WHERE id = ?1",
+                [id],
+            )?;
             processed += 1;
         } else {
             failed += 1;

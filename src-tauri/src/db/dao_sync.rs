@@ -24,11 +24,7 @@ pub fn enqueue(conn: &Connection, item: &SyncQueueRow) -> AppResult<()> {
 
 /// Pop the next due item (oldest due, limited to `limit`), used by the sync
 /// runner to process the queue.
-pub fn pop_due(
-    conn: &Connection,
-    now_ms: i64,
-    limit: i64,
-) -> AppResult<Vec<SyncQueueRow>> {
+pub fn pop_due(conn: &Connection, now_ms: i64, limit: i64) -> AppResult<Vec<SyncQueueRow>> {
     let mut stmt = conn.prepare(
         "SELECT id, kind, payload_json, retry_count, next_retry_at FROM sync_queue \
          WHERE next_retry_at <= ?1 ORDER BY next_retry_at ASC LIMIT ?2",
@@ -67,11 +63,9 @@ pub fn mark_retry(conn: &Connection, id: &str, attempt: i64) -> AppResult<()> {
 }
 
 pub fn setting_get(conn: &Connection, key: &str) -> AppResult<Option<String>> {
-    let r = conn.query_row(
-        "SELECT value FROM settings WHERE key = ?1",
-        [key],
-        |r| r.get::<_, String>(0),
-    );
+    let r = conn.query_row("SELECT value FROM settings WHERE key = ?1", [key], |r| {
+        r.get::<_, String>(0)
+    });
     match r {
         Ok(v) => Ok(Some(v)),
         Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),

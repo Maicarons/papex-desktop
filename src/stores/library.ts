@@ -52,7 +52,7 @@ export const useLibraryStore = create<LibraryState>((set, get) => ({
     } catch (e) {
       // Offline fallback: read the local cache.
       try {
-        const cached = await db.queryLibrary({ category: get().category ?? undefined, sort, limit: 100 });
+        const cached = await db.queryLibrary({ category: get().category ?? undefined, sort: get().sort, limit: 100 });
         const papers: Paper[] = cached.map((r) => ({
           id: r.id,
           title: r.title,

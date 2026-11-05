@@ -108,5 +108,10 @@ pub fn upload_validate(state: State<AppState>, args: ValidateArgs) -> AppResult<
     };
 
     let _ = state;
-    Ok(ValidateResult { ok, size, mime, error })
+    Ok(ValidateResult {
+        ok,
+        size,
+        mime,
+        error,
+    })
 }

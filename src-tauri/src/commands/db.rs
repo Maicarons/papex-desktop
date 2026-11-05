@@ -51,10 +51,7 @@ pub fn annotations_get(
 }
 
 #[tauri::command]
-pub fn annotations_upsert(
-    state: State<AppState>,
-    ann: AnnotationRow,
-) -> AppResult<()> {
+pub fn annotations_upsert(state: State<AppState>, ann: AnnotationRow) -> AppResult<()> {
     ann_upsert(state.db.conn(), &ann)
 }
 

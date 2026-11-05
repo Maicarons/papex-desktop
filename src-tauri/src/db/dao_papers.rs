@@ -108,7 +108,12 @@ pub fn reading_progress_upsert(conn: &Connection, p: &ReadingProgressRow) -> App
            version=excluded.version, page=excluded.page, percent=excluded.percent,
            updated_at=excluded.updated_at, sync_state=excluded.sync_state",
         rusqlite::params![
-            p.paper_id, p.version, p.page, p.percent, p.updated_at, p.sync_state
+            p.paper_id,
+            p.version,
+            p.page,
+            p.percent,
+            p.updated_at,
+            p.sync_state
         ],
     )?;
     Ok(())
